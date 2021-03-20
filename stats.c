@@ -9,341 +9,126 @@
  *
  *****************************************************************************/
 /**
- * @file course1.c 
- * @brief This file is to be used to course 1 final assessment.
+ * @file Assignmet 1 
+ * @brief Statistical Data analysis
  *
- * @author Alex Fosdick
- * @date April 2, 2017
+ * Functions that can analyze an array of unsigned char data items and report analytics on the maximum, minimum, mean, and median of the data set are defined. The data is sorted from large to small and all the results of the statistics are rounded to the nearest integer. After analysis and sorting is done and results are printed
+
+ * @author SYed Taimur Haider
+ * @date 19.03.2021
  *
  */
 
-#include <stdint.h>
-#include "course1.h"
-#include "platform.h"
-#include "memory.h"
-#include "data.h"
+
+
+#include <stdio.h>
 #include "stats.h"
 
-int8_t test_data1() {
-  uint8_t * ptr;
-  int32_t num = -4096;
-  uint32_t digits;
-  int32_t value;
+/* Size of the Data Set */
+#define SIZE (40)
 
-  PRINTF("\ntest_data1();\n");
-  ptr = (uint8_t*) reserve_words( DATA_SET_SIZE_W );
+void main() {
 
-  if (! ptr )
-  {
-    return TEST_ERROR;
-  }
+  unsigned char test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
+                              114, 88,   45,  76, 123,  87,  25,  23,
+                              200, 122, 150, 90,   92,  87, 177, 244,
+                              201,   6,  12,  60,   8,   2,   5,  67,
+                                7,  87, 250, 230,  99,   3, 100,  90};
 
-  digits = my_itoa( num, ptr, BASE_16);   
-  value = my_atoi( ptr, digits, BASE_16);
-  #ifdef VERBOSE
-  PRINTF("  Initial number: %d\n", num);
-  PRINTF("  Final Decimal number: %d\n", value);
-  #endif
-  free_words( (uint32_t*)ptr );
+  /* Other Variable Declarations Go Here */
+int i;int int_test[SIZE];
 
-  if ( value != num )
-  {
-    return TEST_ERROR;
-  }
-  return TEST_NO_ERROR;
-}
+//Converting unsigned char to int
+for(i = 0; i < SIZE; i++)
+  {  int_test[SIZE]=(int)test[SIZE];}
 
-int8_t test_data2() {
-  uint8_t * ptr;
-  int32_t num = 123456;
-  uint32_t digits;
-  int32_t value;
 
-  PRINTF("test_data2():\n");
-  ptr = (uint8_t*) reserve_words( DATA_SET_SIZE_W );
 
-  if (! ptr )
-  {
-    return TEST_ERROR;
-  }
 
-  digits = my_itoa( num, ptr, BASE_10);
-  value = my_atoi( ptr, digits, BASE_10);
-  #ifdef VERBOSE
-  PRINTF("  Initial Decimal number: %d\n", num);
-  PRINTF("  Final Decimal number: %d\n", value);
-  #endif
-  free_words( (uint32_t*)ptr );
+  /* Statistics and Printing Functions Go Here */
 
-  if ( value != num )
-  {
-    return TEST_ERROR;
-  }
-  return TEST_NO_ERROR;
-}
-
-int8_t test_memmove1() {
-  uint8_t i;
-  int8_t ret = TEST_NO_ERROR;
-  uint8_t * set;
-  uint8_t * ptra;
-  uint8_t * ptrb;
-
-  PRINTF("test_memmove1() - NO OVERLAP\n");
-  set = (uint8_t*) reserve_words( MEM_SET_SIZE_W );
-
-  if (! set ) 
-  {
-    return TEST_ERROR;
-  }
+//sorting array in decending order
   
-  ptra = &set[0];
-  ptrb = &set[16];
-  
-  /* Initialize the set to test values */
-  for( i = 0; i < MEM_SET_SIZE_B; i++)
-  {
-    set[i] = i;
-  }
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_memmove(ptra, ptrb, TEST_MEMMOVE_LENGTH);
-  print_array(set, MEM_SET_SIZE_B);
-
-  for (i = 0; i < TEST_MEMMOVE_LENGTH; i++)
-  {
-    if (set[i + 16] != i)
-    {
-      ret = TEST_ERROR;
-    }
-  }
-
-  free_words( (uint32_t*)set );
-  return ret;
-}
-
-int8_t test_memmove2() {
-  uint8_t i;
-  int8_t ret = TEST_NO_ERROR;
-  uint8_t * set;
-  uint8_t * ptra;
-  uint8_t * ptrb;
-
-  PRINTF("test_memmove2() -OVERLAP END OF SRC BEGINNING OF DST\n");
-  set = (uint8_t*) reserve_words(MEM_SET_SIZE_W);
-
-  if (! set )
-  {
-    return TEST_ERROR;
-  }
-  ptra = &set[0];
-  ptrb = &set[8];
-
-  /* Initialize the set to test values */
-  for( i = 0; i < MEM_SET_SIZE_B; i++) {
-    set[i] = i;
-  }
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_memmove(ptra, ptrb, TEST_MEMMOVE_LENGTH);
-  print_array(set, MEM_SET_SIZE_B);
-
-  for (i = 0; i < TEST_MEMMOVE_LENGTH; i++)
-  {
-    if (set[i + 8] != i)
-    {
-      ret = TEST_ERROR;
-    }
-  }
-
-  free_words( (uint32_t*)set );
-  return ret;
-}
-
-int8_t test_memmove3() {
-  uint8_t i;
-  int8_t ret = TEST_NO_ERROR;
-  uint8_t * set;
-  uint8_t * ptra;
-  uint8_t * ptrb;
-
-  PRINTF("test_memove3() - OVERLAP END OF DEST BEGINNING OF SRC\n");
-  set = (uint8_t*)reserve_words( MEM_SET_SIZE_W);
-
-  if (! set ) 
-  {
-    return TEST_ERROR;
-  }
-  ptra = &set[8];
-  ptrb = &set[0];
-
-  /* Initialize the set to test values */
-  for( i = 0; i < MEM_SET_SIZE_B; i++)
-  {
-    set[i] = i;
-  }
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_memmove(ptra, ptrb, TEST_MEMMOVE_LENGTH);
-  print_array(set, MEM_SET_SIZE_B);
-
-  for (i = 0; i < TEST_MEMMOVE_LENGTH; i++)
-  {
-    if (set[i] != (i + 8))
-    {
-      ret = TEST_ERROR;
-    }
-  }
+//Printing array
+printf("\n originol data : \n");  
+print_array(int_test, SIZE);
+ 
+print_statistics(int_test, SIZE);
 
 
-  free_words( (uint32_t*)set );
-  return ret;
+
+//print stats
 
 }
 
-int8_t test_memcopy() {
-  uint8_t i;
-  int8_t ret = TEST_NO_ERROR;
-  uint8_t * set;
-  uint8_t * ptra;
-  uint8_t * ptrb;
+/* Add other Implementation File Code Here */
+// Print Statisticcs
+void print_statistics(int input_data[],int length)
+{int output[4];
+printf("\n Data Statistics : \n");
+sort_array(input_data, length);
+printf("\nSorted array : \n");
+print_array(input_data, SIZE);
+output[0]=find_median (input_data,length);
+printf("\nMedian : \n");
+printf("%d",output[0]);
+output[1]=find_mean (input_data,length);
+printf("\nMean : \n");
+printf("%d",output[1]);
+output[2]=find_maximum (input_data,length);
+printf("\nMaximum : \n");
+printf("%d",output[2]);
+output[3]=find_minimum (input_data,length);
+printf("\nMinimum : \n");
+printf("%d",output[3]);
 
-  PRINTF("test_memcopy()\n");
-  set = (uint8_t*) reserve_words(MEM_SET_SIZE_W);
 
-  if (! set ) 
-  {
-    return TEST_ERROR;
-  }
-  ptra = &set[0];
-  ptrb = &set[16];
-
-  /* Initialize the set to test values */
-  for( i = 0; i < MEM_SET_SIZE_B; i++) {
-    set[i] = i;
-  }
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_memcopy(ptra, ptrb, TEST_MEMMOVE_LENGTH);
-  print_array(set, MEM_SET_SIZE_B);
-
-  for (i = 0; i < TEST_MEMMOVE_LENGTH; i++)
-  {
-    if (set[i+16] != i)
-    {
-      ret = TEST_ERROR;
-    }
-  }
-
-  free_words( (uint32_t*)set );
-  return ret;
 }
 
-int8_t test_memset() 
+
+// Print Array 
+
+void print_array(int input_data[],int length)
 {
-  uint8_t i;
-  uint8_t ret = TEST_NO_ERROR;
-  uint8_t * set;
-  uint8_t * ptra;
-  uint8_t * ptrb;
-
-  PRINTF("test_memset()\n");
-  set = (uint8_t*)reserve_words(MEM_SET_SIZE_W);
-  if (! set )
-  {
-    return TEST_ERROR;
-  }
-  ptra = &set[0];
-  ptrb = &set[16];
-
-  /* Initialize the set to test values */
-  for( i = 0; i < MEM_SET_SIZE_B; i++) 
-  {
-    set[i] = i;
-  }
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_memset(ptra, MEM_SET_SIZE_B, 0xFF);
-  print_array(set, MEM_SET_SIZE_B);
-  my_memzero(ptrb, MEM_ZERO_LENGTH);
-  print_array(set, MEM_SET_SIZE_B);
-  
-  /* Validate Set & Zero Functionality */
-  for (i = 0; i < MEM_ZERO_LENGTH; i++)
-  {
-    if (set[i] != 0xFF)
-    {
-      ret = TEST_ERROR;
-    }
-    if (set[16 + i] != 0)
-    {
-      ret = TEST_ERROR;
-    }
-  }
-  
-  free_words( (uint32_t*)set );
-  return ret;
 }
 
-int8_t test_reverse()
+//find median
+
+int find_median (int input_data[],int length)
+
 {
-  uint8_t i;
-  int8_t ret = TEST_NO_ERROR;
-  uint8_t * copy;
-  uint8_t set[MEM_SET_SIZE_B] = {0x3F, 0x73, 0x72, 0x33, 0x54, 0x43, 0x72, 0x26,
-                                 0x48, 0x63, 0x20, 0x66, 0x6F, 0x00, 0x20, 0x33,
-                                 0x72, 0x75, 0x74, 0x78, 0x21, 0x4D, 0x20, 0x40,
-                                 0x20, 0x24, 0x7C, 0x20, 0x24, 0x69, 0x68, 0x54
-                               };
-
-  PRINTF("test_reverse()\n");
-  copy = (uint8_t*)reserve_words(MEM_SET_SIZE_W);
-  if (! copy )
-  {
-    return TEST_ERROR;
-  }
-  
-  my_memcopy(set, copy, MEM_SET_SIZE_B);
-
-  print_array(set, MEM_SET_SIZE_B);
-  my_reverse(set, MEM_SET_SIZE_B);
-  print_array(set, MEM_SET_SIZE_B);
-
-  for (i = 0; i < MEM_SET_SIZE_B; i++)
-  {
-    if (set[i] != copy[MEM_SET_SIZE_B - i - 1])
-    {
-      ret = TEST_ERROR;
-    }
-  }
-
-  free_words( (uint32_t*)copy );
-  return ret;
+   
 }
 
-void course1(void) 
+//find mean
+int find_mean(int input_data[],int length)
 {
-  uint8_t i;
-  int8_t failed = 0;
-  int8_t results[TESTCOUNT];
 
-  results[0] = test_data1();
-  results[1] = test_data2();
-  results[2] = test_memmove1();
-  results[3] = test_memmove2();
-  results[4] = test_memmove3();
-  results[5] = test_memcopy();
-  results[6] = test_memset();
-  results[7] = test_reverse();
-
-  for ( i = 0; i < TESTCOUNT; i++) 
-  {
-    failed += results[i];
-  }
-
-  PRINTF("--------------------------------\n");
-  PRINTF("Test Results:\n");
-  PRINTF("  PASSED: %d / %d\n", (TESTCOUNT - failed), TESTCOUNT);
-  PRINTF("  FAILED: %d / %d\n", failed, TESTCOUNT);
-  PRINTF("--------------------------------\n");
 }
+
+//find maximum
+int find_maximum(int input_data[],int length)
+{ 
+}
+ 
+//find minimum
+
+int find_minimum(int input_data[],int length) 
+
+{ 
+
+
+}
+
+//sort_array
+
+int sort_array(int input_data[],int length)
+{
+}
+
+
+
+
+
+
+
