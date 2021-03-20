@@ -89,7 +89,10 @@ printf("%d",output[3]);
 // Print Array 
 
 void print_array(int input_data[],int length)
-{
+{int i;
+
+for(i = 0; i < length; i++)
+   printf("%d ", input_data[i]);
 }
 
 //find median
@@ -97,33 +100,94 @@ void print_array(int input_data[],int length)
 int find_median (int input_data[],int length)
 
 {
-   
+    int median=0;
+    
+    if(length%2 == 0)
+        median = (input_data[(length-1)/2] + input_data[length/2])/2.0;
+    
+    else
+        median = input_data[length/2];
+    
+    return median;
 }
 
 //find mean
 int find_mean(int input_data[],int length)
-{
+{int mean=0;int i=0;int sum=0;
+
+for (i=0;i<length;i++)
+    {sum=sum+(input_data[i]);}
+
+mean=sum/length;
+return mean;
 
 }
 
 //find maximum
 int find_maximum(int input_data[],int length)
-{ 
+{ int maximum; 
+int i;int j;int tmp;
+
+for(i=0; i<length; i++)
+    {
+        for(j=i+1; j<length; j++)
+        {
+            if(input_data[i] < input_data[j])
+            {
+                tmp = input_data[i];
+                input_data[i] = input_data[j];
+                input_data[j] = tmp;
+            }
+        }
+}
+maximum=input_data[0];
+return maximum;
 }
  
 //find minimum
 
 int find_minimum(int input_data[],int length) 
 
-{ 
+{ int minimum;
 
+int i;int j;int tmp;
 
+for(i=0; i<length; i++)
+    {
+        for(j=i+1; j<length; j++)
+        {
+            if(input_data[i] < input_data[j])
+            {
+                tmp = input_data[i];
+                input_data[i] = input_data[j];
+                input_data[j] = tmp;
+            }
+        }
+}
+
+minimum=input_data[length-1];
+return minimum;
 }
 
 //sort_array
 
 int sort_array(int input_data[],int length)
-{
+{int i;int j;int tmp;
+
+for(i=0; i<length; i++)
+    {
+        for(j=i+1; j<length; j++)
+        {
+            if(input_data[i] < input_data[j])
+            {
+                tmp = input_data[i];
+                input_data[i] = input_data[j];
+                input_data[j] = tmp;
+            }
+        }
+}
+return input_data;
+
 }
 
 
